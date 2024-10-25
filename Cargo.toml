@@ -1,0 +1,14 @@
+[package]
+name = "validator-crate"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-http = "3.9.0"
+actix-web = "4.9.0"
+lazy_static = "1.5.0"
+serde = { version = "1.0.213", features = ["derive"] }
+serde_json = "1.0.132"
+serde_repr = "0.1.19"
+tokio = { version = "1.4.0", features = ["full"] }
+validator = { version = "0.18.1", features = ["derive"] }
