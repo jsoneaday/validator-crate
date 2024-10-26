@@ -3,12 +3,11 @@ use serde::Deserialize;
 use validator::{Validate, ValidationError};
 
 #[allow(unused)]
-#[derive(Deserialize, Validate)]
+#[derive(Deserialize, Debug, Validate)]
 struct User {
     #[validate(length(min = 5, max = 10))]
-    #[serde(rename = "userName")]
     user_name: String,
-    #[validate(length(min = 10), custom(function = "is_valid_password"))]
+    #[validate(length(min = 10, max = 20), custom(function = "is_valid_password"))]
     password: String,
     #[validate(email)]
     email: String,
@@ -20,7 +19,7 @@ fn is_valid_password(password: &str) -> Result<(), ValidationError> {
     let has_numbers = regex::Regex::new(r"\d").unwrap();
     let has_symbols = regex::Regex::new(r#"[!@#\$%\^&\*\(\),\.\?\":{}|<>]"#).unwrap();
 
-    match has_numbers.is_match(&password) && has_symbols.is_match(&password) {
+    match has_numbers.is_match(password) && has_symbols.is_match(password) {
         true => Ok(()),
         false => Err(ValidationError::new("Password is invalid"))
     }
@@ -40,7 +39,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(new_user)
     })
-    .bind(("0.0.0.0", 4000)).expect("Failed to bind server")
+    .bind(("0.0.0.0", 4000)).expect("Failed to bind")
     .run()
     .await
 }
